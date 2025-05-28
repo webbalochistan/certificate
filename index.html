@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search SDS Certificate</title>
+</head>
+<body>
+    <iframe src="https://script.google.com/macros/s/AKfycbz8YSOBYpSrF2f8zJXMEVSIv2IMEYaUehIOleWlajE-Y3rpA3og9FSXIISJ20cXOcxm/exec"
+        width="100%"
+        height="100%"
+        allowfullscreen="true"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
+    </iframe>
+
+    <script>
+        window.onload = function() {
+            document.querySelector('iframe').requestFullscreen().catch((err) => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        };
+    </script>
+</body>
+</html>
