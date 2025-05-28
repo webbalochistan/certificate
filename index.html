@@ -80,37 +80,30 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec";
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const trade = document.getElementById("trade").value;
+      const cnic = document.getElementById("cnic").value.trim();
 
-  function handleFormSubmit(event) {
-    event.preventDefault();
+      document.getElementById("loading").classList.remove("d-none");
+      document.getElementById("output").innerHTML = "";
 
-    const trade = document.getElementById("trade").value;
-    const cnic = document.getElementById("cnic").value.trim();
-    const loading = document.getElementById("loading");
-    const output = document.getElementById("output");
+      google.script.run.withSuccessHandler(function(link) {
+        document.getElementById("loading").classList.add("d-none");
 
-    if (!trade || !cnic) return;
-
-    loading.classList.remove("d-none");
-    output.innerHTML = "";
-
-    google.script.run.withSuccessHandler(function(link) {
-      loading.classList.add("d-none");
-
-      if (link) {
-        const fileIdMatch = link.match(/\/d\/([^\/]+)\//);
-        const fileId = fileIdMatch ? fileIdMatch[1] : null;
-
-        output.innerHTML = `
-          <iframe src="${link}" allowfullscreen></iframe>
-          ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
-        `;
-      } else {
-        output.innerHTML = `<div class="alert alert-danger">No certificate found for <strong>${trade}</strong> with your CNIC: <strong>${cnic}</strong></div>`;
-      }
-    }).searchCNIC(trade, cnic);
-  }
-</script>
+        if (link) {
+          const fileId = link.split("/d/")[1].split("/")[0];
+          document.getElementById("output").innerHTML = `
+            <iframe src="${link}" allowfullscreen></iframe>
+            <div class="mt-3 text-center">
+              <a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a>
+            </div>
+          `;
+        } else {
+          document.getElementById("output").innerHTML = `<div class="alert alert-danger">No certificate found.</div>`;
+        }
+      }).searchCNIC(trade, cnic);
+    }
+  </script>
 </body>
 </html>
