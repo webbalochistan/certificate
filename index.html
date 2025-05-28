@@ -1,116 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Search SDS Certificate</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .web-title {
-      font-family: 'Arial', sans-serif;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .welfare { color: #024d0b; }
-    .image-spinner {
-      width: 80px;
-      height: 80px;
-      animation: flipImage 1.5s linear infinite;
-    }
-    @keyframes flipImage {
-      0% { transform: rotateY(0deg); }
-      50% { transform: rotateY(180deg); }
-      100% { transform: rotateY(360deg); }
-    }
-    iframe {
-      width: 100%;
-      height: 138vh;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-  </style>
+  <title>Embedded Content</title>
 </head>
-<body class="bg-light">
-  <div class="container py-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <div class="text-center mb-4">
-          <img src='https://i.postimg.cc/SRvkYFRQ/SDS-Logo.png' class="img-fluid mb-2" style="max-height: 120px;">
-          <div class="web-title" style="font-size:60px;">
-            <span class="welfare">Sector for Development Studies</span>
-          </div>
-          <h4 class="fw-bold">Search Your Certificate</h4>
-        </div>
-
-        <form id="searchForm" onsubmit="handleFormSubmit(event)">
-          <div class="row g-3 align-items-end">
-            <div class="col-md-5">
-              <label for="trade" class="form-label fw-bold">Select Trade/Class</label>
-              <select id="trade" class="form-select" required>
-                <option value="" disabled selected>-- Select --</option>
-                <option value="Graphics Designing">Graphics Designing</option>
-                <option value="E-Commerce">E-Commerce</option>
-                <option value="Beautician">Beautician</option>
-                <option value="Hand & Machine Embroidery">Hand & Machine Embroidery</option>
-                <option value="Digital Marketing">Digital Marketing</option>
-                <option value="Fashion Designing / Dress Making">Fashion Designing / Dress Making</option>
-                <option value="CIT">CIT</option>
-              </select>
-            </div>
-            <div class="col-md-5">
-              <label for="cnic" class="form-label fw-bold">Enter CNIC Number</label>
-              <input type="text" id="cnic" class="form-control" placeholder="e.g. 1234512345671 or 12345-1234567-1" required>
-            </div>
-            <div class="col-md-2 d-grid">
-              <button type="submit" class="btn btn-primary px-5">Search</button>
-            </div>
-          </div>
-        </form>
-
-        <div id="loading" class="text-center my-4 d-none">
-          <img src="https://i.postimg.cc/SRvkYFRQ/SDS-Logo.png" alt="Loading..." class="image-spinner">
-          <p class="mt-2 text-muted">Searching, please wait...</p>
-        </div>
-
-        <div id="output" class="mt-4"></div>
-      </div>
-    </div>
-  </div>
+<body>
+  <iframe 
+    src="https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec"
+    width="100%"
+    height="100%"
+    allowfullscreen="true"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
+  </iframe>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec";
-
-  function handleFormSubmit(event) {
-    event.preventDefault();
-
-    const trade = document.getElementById("trade").value;
-    const cnic = document.getElementById("cnic").value.trim();
-    const loading = document.getElementById("loading");
-    const output = document.getElementById("output");
-
-    if (!trade || !cnic) return;
-
-    loading.classList.remove("d-none");
-    output.innerHTML = "";
-
-    google.script.run.withSuccessHandler(function(link) {
-      loading.classList.add("d-none");
-
-      if (link) {
-        const fileIdMatch = link.match(/\/d\/([^\/]+)\//);
-        const fileId = fileIdMatch ? fileIdMatch[1] : null;
-
-        output.innerHTML = `
-          <iframe src="${link}" allowfullscreen></iframe>
-          ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
-        `;
-      } else {
-        output.innerHTML = `<div class="alert alert-danger">No certificate found for <strong>${trade}</strong> with your CNIC: <strong>${cnic}</strong></div>`;
-      }
-    }).searchCNIC(trade, cnic);
-  }
-</script>
+    window.onload = function() {
+      document.querySelector('iframe')
+        .requestFullscreen()
+        .catch((err) => {
+          console.error('Error attempting to enable full-screen mode:', err.message);
+        });
+    };
+  </script>
 </body>
 </html>
