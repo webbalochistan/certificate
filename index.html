@@ -95,6 +95,9 @@
       loading.classList.remove("d-none");
       output.innerHTML = "";
 
+      google.script.run.withSuccessHandler(function(link) {
+        loading.classList.add("d-none");
+      
       const url = `${scriptURL}?sheet=${encodeURIComponent(trade)}&cnic=${encodeURIComponent(cnic)}`;
 
       fetch(url)
