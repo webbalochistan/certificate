@@ -82,43 +82,46 @@
 <script>
   const webAppUrl = "https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec";
 
-  function handleFormSubmit(event) {
-    event.preventDefault();
 
-    const trade = document.getElementById("trade").value;
-    const cnic = document.getElementById("cnic").value.trim();
-    const loading = document.getElementById("loading");
-    const output = document.getElementById("output");
+function handleFormSubmit(event) {
+  event.preventDefault();
 
-    if (!trade || !cnic) return;
+  const trade = document.getElementById("trade").value;
+  const cnic = document.getElementById("cnic").value.trim();
+  const loading = document.getElementById("loading");
+  const output = document.getElementById("output");
 
-    loading.classList.remove("d-none");
-    output.innerHTML = "";
+  if (!trade || !cnic) return;
 
-    const url = `${webAppUrl}?sheet=${encodeURIComponent(trade)}&cnic=${encodeURIComponent(cnic)}`;
+  loading.classList.remove("d-none");
+  output.innerHTML = "";
 
-    fetch(url)
-      .then(res => res.text())
-      .then(link => {
-        loading.classList.add("d-none");
+  const url = `${webAppUrl}?sheet=${encodeURIComponent(trade)}&cnic=${encodeURIComponent(cnic)}`;
 
-        if (link && link.includes("drive.google.com")) {
-          const fileIdMatch = link.match(/\/d\/([^\/]+)\//);
-          const fileId = fileIdMatch ? fileIdMatch[1] : null;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.text();
+    })
+    .then(link => {
+      loading.classList.add("d-none");
 
-          output.innerHTML = `
-            <iframe src="${link}" allowfullscreen></iframe>
-            ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
-          `;
-        } else {
-          output.innerHTML = `<div class="alert alert-danger">No certificate found for <strong>${trade}</strong> with your CNIC: <strong>${cnic}</strong></div>`;
-        }
-      })
-      .catch(err => {
-        loading.classList.add("d-none");
-        output.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
-      });
-  }
+      if (link.includes("drive.google.com")) {
+        const fileId = link.match(/\/d\/([^\/]+)\//)?.[1];
+
+        output.innerHTML = `
+          <iframe src="${link}" allowfullscreen></iframe>
+          ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
+        `;
+      } else {
+        output.innerHTML = `<div class="alert alert-danger">No certificate found.</div>`;
+      }
+    })
+    .catch(err => {
+      loading.classList.add("d-none");
+      output.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
+    });
+}
 </script>
 </body>
 </html>
