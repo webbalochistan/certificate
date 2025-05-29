@@ -25,14 +25,14 @@
     }
     iframe {
       width: 100%;
-      height: 1050px;
+      height: 920px;
       border: 1px solid #ccc;
       border-radius: 8px;
       margin-top: 20px;
     }
   </style>
 </head>
-<body>
+<body class="container">
 
       <div class="card-body">
         <div class="text-center mb-4">
@@ -106,7 +106,7 @@ function handleFormSubmit(event) {
         const fileId = link.match(/\/d\/([^\/]+)\//)?.[1];
         output.innerHTML = `
           <iframe src="${link}" allowfullscreen></iframe>
-          ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
+          ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a><br><br></div>` : ''}
         `;
       } else {
         output.innerHTML = `<div class="alert alert-danger">No certificate found.</div>`;
