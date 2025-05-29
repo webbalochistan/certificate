@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Search Certificate PDF</title>
+  <title>Search SDS Certificate</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     .web-title {
@@ -80,8 +80,8 @@
   </div>
 
 <script>
-  const webAppUrl = "https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec";
 
+const webAppUrl = "https://script.google.com/macros/s/AKfycbwmU-Nk9E27j1toiMPPbEedZk8fWe_WMsNJzGIvvNW4nOn21QNtktgFrICRc0ew-TnF/exec";
 
 function handleFormSubmit(event) {
   event.preventDefault();
@@ -99,16 +99,12 @@ function handleFormSubmit(event) {
   const url = `${webAppUrl}?sheet=${encodeURIComponent(trade)}&cnic=${encodeURIComponent(cnic)}`;
 
   fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.text();
-    })
+    .then(response => response.text())
     .then(link => {
       loading.classList.add("d-none");
 
       if (link.includes("drive.google.com")) {
         const fileId = link.match(/\/d\/([^\/]+)\//)?.[1];
-
         output.innerHTML = `
           <iframe src="${link}" allowfullscreen></iframe>
           ${fileId ? `<div class="mt-3 text-center"><a class="btn btn-success" href="https://drive.google.com/uc?export=download&id=${fileId}" target="_blank">Download Certificate</a></div>` : ''}
@@ -122,6 +118,7 @@ function handleFormSubmit(event) {
       output.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
     });
 }
+
 </script>
 </body>
 </html>
